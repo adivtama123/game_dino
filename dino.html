@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Kuis Edukasi</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background-image: url("html/pemandangan.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 20px;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            margin: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .question {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: #333;
+            font-weight: bold;
+        }
+        .option {
+            display: block;
+            width: 100%;
+            margin: 12px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .option:hover {
+            background-color: #1511ff;            
+            color: white;
+            transform: translateY(-2px);
+        }
+        .result {
+            margin-top: 25px;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="question" id="question">Pertanyaan akan tampil di sini</div>
+    <div id="options"></div>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            question: "50 x 50 = ?",
+            options: ["2500", "5000", "1000", "2000"],
+            answer: "2500"
+        },
+        {
+            question: "Apa warna langit pada siang hari?",
+            options: ["Merah", "Biru", "Hijau", "Kuning"],
+            answer: "Biru"
+        },
+        {
+            question: "Apa ibu kota Indonesia?",
+            options: ["Jakarta", "Bandung", "Surabaya", "Medan"],
+            answer: "Jakarta"
+        },
+        {
+            question: "2 + 3 = ?",
+            options: ["4", "5", "6", "7"],
+            answer: "5"
+        },
+        {
+            question: "Hewan yang bisa terbang adalah?",
+            options: ["Ikan", "Burung", "Gajah", "Kucing"],
+            answer: "Burung"
+        },
+        {
+            question: "Sudut terkecil yang dibentuk jam pada pukul 04.00 adalah?",
+            options: ["90", "120", "150", "180"],
+            answer: "120"
+        },
+        {
+            question: "Berapa keliling persegi panjang jika panjangnya 10 m dan lebarnya 5 m?",
+            options: ["15", "20", "25", "30"],
+            answer: "30"
+        },
+    
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function resetQuiz() {
+        currentQuestion = 0;
+        score = 0;
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        const questionEl = document.getElementById("question");
+        const optionsEl = document.getElementById("options");
+        const resultEl = document.getElementById("result");
+
+        resultEl.textContent = `Skor: ${score}`;
+        resultEl.style.color = "blue";
+        
+        const q = quizData[currentQuestion];
+        questionEl.textContent = q.question;
+        optionsEl.innerHTML = "";
+
+        q.options.forEach(option => {
+            const button = document.createElement("button");
+            button.textContent = option;
+            button.className = "option";
+            button.onclick = () => checkAnswer(option);
+            optionsEl.appendChild(button);
+        });
+    }
+
+    function checkAnswer(selected) {
+        const resultEl = document.getElementById("result");
+        const correct = quizData[currentQuestion].answer;
+
+        if (selected === correct) {
+            resultEl.textContent = `Benar! Skor: ${++score}`;
+            resultEl.style.color = "green";
+        } else {
+            resultEl.textContent = `Salah! Jawaban benar adalah ${correct}`;
+            resultEl.style.color = "red";
+        }
+
+        setTimeout(() => {
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                document.getElementById("question").textContent = `Game selesai! Skor akhir: ${score}`;
+                document.getElementById("options").innerHTML = "";
+                setTimeout(resetQuiz, 3000);
+            }
+        }, 2000);
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>
